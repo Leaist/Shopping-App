@@ -10,12 +10,22 @@
             :price="(item.product.price / 100).toFixed(2)"
             :title="item.product.name"
             :thumb="item.product.coverImg | dalImg"
-          >
+            ><template #tags>
+              <van-tag plain type="danger">热卖</van-tag>
+              <van-tag plain type="danger">优惠</van-tag>
+            </template>
+            <template #footer>
+              <van-button @click="delHandle(item)" type="danger" size="mini"
+                >移除</van-button
+              >
+              <!-- <van-button size="mini">+</van-button>
+              <van-button size="mini">-</van-button> -->
+            </template>
           </van-card>
         </van-checkbox>
       </div>
       <van-submit-bar
-        style="position: static" 
+        style="position: static"
         :price="sumPrice"
         button-text="提交订单"
         @submit="onSubmit"
@@ -27,7 +37,9 @@
 </template>
 
 <script>
+import { Toast } from "vant";
 import { loadCartsAPI } from "../services/catrs";
+import { delCartAPI } from "../services/catrs";
 export default {
   name: "Cart",
   data() {
@@ -59,10 +71,15 @@ export default {
   },
   methods: {
     onSubmit() {},
+    async delHandle(item) {
+      // console.log("移除购物车");
+      // console.log(item._id);
+      await delCartAPI(item._id);
+      Toast.success("移除成功");
+    }
   },
 };
 </script>
-
 <style scoped>
 .item {
   display: flex;
